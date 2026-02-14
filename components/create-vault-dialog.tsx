@@ -57,7 +57,7 @@ export function CreateVaultDialog() {
               Create a new vault to house your research sources and annotations.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 px-5">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input

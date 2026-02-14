@@ -52,8 +52,8 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <main className="min-h-screen flex items-center justify-center p-4 bg-neo-bg">
+      <Card className="w-full max-w-md shadow-neo-xl">
         <CardHeader>
           <CardTitle>{isSignUp ? 'Create account' : 'Sign in'}</CardTitle>
           <CardDescription>
@@ -96,7 +96,7 @@ export default function LoginPage() {
             </Button>
             <button
               type="button"
-              className="text-sm text-muted-foreground hover:underline"
+              className="text-sm font-bold text-muted-foreground border-b-2 border-neo-cyan hover:bg-neo-cyan transition-colors py-1"
               onClick={() => {
                 setIsSignUp(!isSignUp)
                 setError(null)
@@ -106,7 +106,7 @@ export default function LoginPage() {
                 ? 'Already have an account? Sign in'
                 : "Don't have an account? Sign up"}
             </button>
-            <Link href="/" className="text-sm text-muted-foreground hover:underline">
+            <Link href="/" className="text-sm font-bold text-muted-foreground border-b-2 border-neo-cyan hover:bg-neo-cyan transition-colors py-1">
               Back to home
             </Link>
           </CardFooter>

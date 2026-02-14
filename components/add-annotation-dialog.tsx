@@ -58,7 +58,7 @@ export function AddAnnotationDialog({
               Add a note or highlight for this source.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 px-5">
             <div className="space-y-2">
               <Label htmlFor="note">Note</Label>
               <textarea
@@ -66,7 +66,7 @@ export function AddAnnotationDialog({
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Your annotation..."
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex min-h-[80px] w-full border-[3px] border-neo-black bg-neo-white px-4 py-2.5 text-base font-semibold placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-cyan focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shadow-[inset_3px_3px_0px_rgba(0,0,0,0.1)]"
                 required
               />
             </div>

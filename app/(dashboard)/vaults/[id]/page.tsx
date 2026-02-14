@@ -65,11 +65,11 @@ export default async function VaultPage({
   return (
     <RealtimeVault vaultId={id}>
       <div className="container mx-auto py-8 px-4">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold">{vault.name}</h1>
+            <h1 className="text-4xl font-black uppercase border-l-8 border-neo-cyan pl-4">{vault.name}</h1>
             {vault.description && (
-              <p className="text-muted-foreground mt-1">{vault.description}</p>
+              <p className="text-muted-foreground mt-2 font-medium">{vault.description}</p>
             )}
           </div>
           {role === 'owner' && (

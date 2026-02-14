@@ -57,7 +57,7 @@ export function AddSourceDialog({ vaultId }: { vaultId: string }) {
               Add a research source with URL and title. You can optionally upload a PDF later.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 px-5">
             <div className="space-y-2">
               <Label htmlFor="title">Title *</Label>
               <Input

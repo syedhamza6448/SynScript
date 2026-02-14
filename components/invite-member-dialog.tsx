@@ -71,7 +71,7 @@ export function InviteMemberDialog({
               Invite a collaborator by email. They must have an account to be added.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 px-5">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -85,24 +85,26 @@ export function InviteMemberDialog({
             </div>
             <div className="space-y-2">
               <Label>Role</Label>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div className="flex gap-4 flex-wrap">
+                <label className={`flex items-center gap-2 cursor-pointer px-4 py-2 border-[3px] border-neo-black font-bold transition-colors ${role === 'contributor' ? 'bg-neo-yellow' : 'bg-neo-white hover:bg-neo-gray'}`}>
                   <input
                     type="radio"
                     name="role"
                     value="contributor"
                     checked={role === 'contributor'}
                     onChange={() => setRole('contributor')}
+                    className="sr-only"
                   />
                   Contributor (can add/edit)
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label className={`flex items-center gap-2 cursor-pointer px-4 py-2 border-[3px] border-neo-black font-bold transition-colors ${role === 'viewer' ? 'bg-neo-yellow' : 'bg-neo-white hover:bg-neo-gray'}`}>
                   <input
                     type="radio"
                     name="role"
                     value="viewer"
                     checked={role === 'viewer'}
                     onChange={() => setRole('viewer')}
+                    className="sr-only"
                   />
                   Viewer (read-only)
                 </label>

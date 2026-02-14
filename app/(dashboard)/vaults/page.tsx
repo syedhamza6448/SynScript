@@ -36,10 +36,10 @@ export default async function VaultsPage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Knowledge Vaults</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-4xl font-black uppercase border-b-[5px] border-neo-black pb-3 inline-block">Knowledge Vaults</h1>
+          <p className="text-muted-foreground mt-2 font-medium">
             Your shared research repositories
           </p>
         </div>
@@ -47,7 +47,7 @@ export default async function VaultsPage() {
       </div>
 
       {vaultList.length === 0 ? (
-        <Card>
+        <Card className="shadow-neo-lg">
           <CardHeader>
             <CardTitle>No vaults yet</CardTitle>
             <CardDescription>

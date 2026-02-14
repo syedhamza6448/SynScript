@@ -21,15 +21,15 @@ export default async function DashboardLayout({
   const { accepted } = await acceptPendingInvites()
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-neo-bg">
       {accepted.length > 0 && <InviteNotification vaultIds={accepted} />}
-      <header className="border-b">
-        <div className="container mx-auto flex items-center justify-between h-14 px-4">
-          <Link href="/vaults" className="font-bold text-xl">
+      <header className="border-b-[5px] border-neo-black bg-neo-white shadow-neo-md">
+        <div className="container mx-auto flex items-center justify-between min-h-[56px] px-6">
+          <Link href="/vaults" className="font-black text-xl uppercase tracking-wide">
             SynScript
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user.email}</span>
+            <span className="text-sm font-semibold text-muted-foreground">{user.email}</span>
             <form action={signOutAction}>
               <Button type="submit" variant="outline" size="sm">
                 Sign out

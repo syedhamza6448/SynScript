@@ -63,14 +63,14 @@ export function UploadPdfDialog({
               Upload a research paper or whitepaper to attach to this source.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 px-5">
             {error && <p className="text-sm text-destructive">{error}</p>}
             <input
               type="file"
               name="file"
               accept=".pdf,application/pdf"
               required
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="flex h-10 w-full border-[3px] border-neo-black bg-neo-white px-4 py-2.5 text-base font-semibold"
             />
           </div>
           <DialogFooter>

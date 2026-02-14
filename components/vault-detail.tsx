@@ -47,7 +47,7 @@ export function VaultDetail({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-semibold">Sources</h2>
+          <h2 className="text-xl font-black uppercase">Sources</h2>
           <span className="text-sm text-muted-foreground flex items-center gap-1">
             <Users className="h-4 w-4" />
             {members.length} member{members.length !== 1 ? 's' : ''}
@@ -57,7 +57,7 @@ export function VaultDetail({
       </div>
 
       {sources.length === 0 ? (
-        <div className="border rounded-lg p-12 text-center text-muted-foreground">
+        <div className="border-[4px] border-neo-black bg-neo-white p-12 text-center text-muted-foreground font-medium shadow-neo-md">
           <p className="mb-4">No sources yet. Add your first research source.</p>
           {canEdit && <AddSourceDialog vaultId={vaultId} />}
         </div>

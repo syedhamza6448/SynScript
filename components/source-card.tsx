@@ -60,7 +60,7 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
   }
 
   return (
-    <Card>
+    <Card className="shadow-neo-md">
       <CardHeader className="flex flex-row items-start justify-between space-y-0">
         <div className="space-y-1.5 flex-1">
           <CardTitle className="text-lg">{source.title}</CardTitle>
@@ -70,7 +70,7 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
                 href={source.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-primary hover:underline flex items-center gap-1"
+                className="text-sm font-bold text-neo-black border-b-2 border-neo-cyan hover:bg-neo-cyan flex items-center gap-1 transition-colors"
               >
                 <ExternalLink className="h-4 w-4" />
                 Open URL
@@ -81,7 +81,7 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
                 href={source.pdf_url || source.file_path || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-primary hover:underline flex items-center gap-1"
+                className="text-sm font-bold text-neo-black border-b-2 border-neo-cyan hover:bg-neo-cyan flex items-center gap-1 transition-colors"
               >
                 <FileText className="h-4 w-4" />
                 View PDF
@@ -117,7 +117,7 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
               {source.annotations.map((ann) => (
                 <li
                   key={ann.id}
-                  className="text-sm p-2 rounded bg-muted/50 border-l-2 border-primary"
+                  className="text-sm p-2 font-medium bg-neo-gray border-l-4 border-neo-cyan"
                 >
                   {ann.note}
                 </li>

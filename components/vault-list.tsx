@@ -23,7 +23,7 @@ export function VaultList({ vaults }: { vaults: Vault[] }) {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {vaults.map((vault) => (
         <Link key={vault.id} href={`/vaults/${vault.id}`}>
-          <Card className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
+          <Card className="hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-xl transition-all cursor-pointer h-full">
             <CardHeader className="flex flex-row items-start justify-between space-y-0">
               <div className="space-y-1.5">
                 <CardTitle className="flex items-center gap-2">
