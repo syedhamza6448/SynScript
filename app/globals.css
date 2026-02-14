@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Neo Brutalism Color Palette */
+    /* Neo Brutalism Color Palette - Light */
     --neo-yellow: #FFEB3B;
     --neo-cyan: #00BCD4;
     --neo-pink: #FF4081;
@@ -16,7 +16,10 @@
     --neo-gray: #E0E0E0;
     --neo-bg-light: #FAFAFA;
 
-    /* Hard shadows - no blur */
+    /* Grid & decorative */
+    --grid-color: rgba(0, 0, 0, 0.08);
+
+    /* Hard shadows - light mode (black) */
     --shadow-sm: 3px 3px 0px #000;
     --shadow-md: 5px 5px 0px #000;
     --shadow-lg: 8px 8px 0px #000;
@@ -57,6 +60,50 @@
     --ring: var(--neo-cyan);
     --radius: 0;
   }
+
+  .dark {
+    /* Neo Brutalism - Dark mode (inverted, high contrast) */
+    --neo-yellow: #FFEB3B;
+    --neo-cyan: #26C6DA;
+    --neo-pink: #FF80AB;
+    --neo-green: #69F0AE;
+    --neo-orange: #FFB74D;
+    --neo-purple: #CE93D8;
+    --neo-black: #FFFFFF;
+    --neo-white: #1A1A1A;
+    --neo-gray: #2D2D2D;
+    --neo-bg-light: #0D0D0D;
+
+    /* Grid & decorative - lighter for visibility */
+    --grid-color: rgba(255, 255, 255, 0.06);
+
+    /* Hard shadows - dark mode (white/light offset) */
+    --shadow-sm: 3px 3px 0px rgba(255, 255, 255, 0.15);
+    --shadow-md: 5px 5px 0px rgba(255, 255, 255, 0.15);
+    --shadow-lg: 8px 8px 0px rgba(255, 255, 255, 0.15);
+    --shadow-xl: 12px 12px 0px rgba(255, 255, 255, 0.15);
+
+    /* Semantic - dark */
+    --background: #0D0D0D;
+    --foreground: #FFFFFF;
+    --card: #1A1A1A;
+    --card-foreground: #FFFFFF;
+    --popover: #1A1A1A;
+    --popover-foreground: #FFFFFF;
+    --primary: #FFFFFF;
+    --primary-foreground: #0D0D0D;
+    --secondary: #2D2D2D;
+    --secondary-foreground: #FFFFFF;
+    --muted: #2D2D2D;
+    --muted-foreground: #A0A0A0;
+    --accent: var(--neo-yellow);
+    --accent-foreground: #0D0D0D;
+    --destructive: var(--neo-pink);
+    --destructive-foreground: #FFFFFF;
+    --border: rgba(255, 255, 255, 0.3);
+    --input: rgba(255, 255, 255, 0.5);
+    --ring: var(--neo-cyan);
+  }
 }
 
 @layer base {
@@ -65,9 +112,10 @@
   }
   body {
     font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: var(--neo-bg-light);
-    color: var(--neo-black);
+    background-color: var(--background);
+    color: var(--foreground);
     line-height: 1.5;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   /* Brutalist typography */
@@ -80,14 +128,14 @@
 
   h1 {
     font-size: 48px;
-    border-bottom: 5px solid var(--neo-black);
+    border-bottom: 5px solid var(--foreground);
     padding-bottom: 16px;
     margin-bottom: 24px;
   }
 
   h2 {
     font-size: 36px;
-    border-left: 8px solid var(--neo-cyan);
+    border-left: 8px solid var(--ring);
     padding-left: 16px;
     margin-bottom: 20px;
   }
@@ -106,20 +154,29 @@
 
   strong, b {
     font-weight: 800;
-    background-color: var(--neo-yellow);
+    background-color: var(--accent);
     padding: 2px 4px;
+    color: var(--accent-foreground);
   }
 
   a {
-    color: var(--neo-black);
+    color: var(--foreground);
     text-decoration: none;
-    border-bottom: 3px solid var(--neo-cyan);
+    border-bottom: 3px solid var(--ring);
     font-weight: 700;
     transition: all 0.1s ease;
   }
 
   a:hover {
-    background-color: var(--neo-cyan);
-    border-bottom: 3px solid var(--neo-black);
+    background-color: var(--ring);
+    border-bottom-color: var(--foreground);
   }
+}
+
+/* Grid background utility */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 24px 24px;
 }

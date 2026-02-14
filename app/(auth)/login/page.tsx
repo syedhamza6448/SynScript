@@ -15,6 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { BackgroundGrid } from '@/components/background-grid'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -52,7 +54,11 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 bg-neo-bg">
+    <BackgroundGrid>
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-md shadow-neo-xl">
         <CardHeader>
           <CardTitle>{isSignUp ? 'Create account' : 'Sign in'}</CardTitle>
@@ -113,5 +119,6 @@ export default function LoginPage() {
         </form>
       </Card>
     </main>
+    </BackgroundGrid>
   )
 }

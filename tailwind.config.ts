@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -15,10 +16,10 @@ const config: Config = {
         'neo-green': '#4CAF50',
         'neo-orange': '#FF9800',
         'neo-purple': '#9C27B0',
-        'neo-black': '#000000',
-        'neo-white': '#FFFFFF',
-        'neo-gray': '#E0E0E0',
-        'neo-bg': '#FAFAFA',
+        'neo-black': 'var(--neo-black)',
+        'neo-white': 'var(--neo-white)',
+        'neo-gray': 'var(--neo-gray)',
+        'neo-bg': 'var(--neo-bg-light)',
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
@@ -54,10 +55,10 @@ const config: Config = {
         },
       },
       boxShadow: {
-        'neo-sm': '3px 3px 0px #000',
-        'neo-md': '5px 5px 0px #000',
-        'neo-lg': '8px 8px 0px #000',
-        'neo-xl': '12px 12px 0px #000',
+        'neo-sm': 'var(--shadow-sm)',
+        'neo-md': 'var(--shadow-md)',
+        'neo-lg': 'var(--shadow-lg)',
+        'neo-xl': 'var(--shadow-xl)',
       },
       borderRadius: {
         lg: '0',
