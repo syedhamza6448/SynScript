@@ -56,41 +56,42 @@
     --destructive: var(--neo-pink);
     --destructive-foreground: var(--neo-white);
     --border: var(--neo-black);
+    --border-nav: var(--neo-black);
     --input: var(--neo-black);
     --ring: var(--neo-cyan);
     --radius: 0;
   }
 
   .dark {
-    /* Neo Brutalism - Dark mode (improved readability) */
+    /* Neo Brutalism - Dark mode (softer borders, better contrast) */
     --neo-yellow: #FFEB3B;
     --neo-cyan: #4DD0E1;
     --neo-pink: #FF80AB;
     --neo-green: #69F0AE;
     --neo-orange: #FFB74D;
     --neo-purple: #CE93D8;
-    --neo-black: #FFFFFF;
+    --neo-black: #E8E8E8;
     --neo-white: #252525;
     --neo-gray: #3D3D3D;
     --neo-bg-light: #121212;
 
-    /* Grid & decorative - lighter for visibility */
-    --grid-color: rgba(255, 255, 255, 0.08);
+    /* Grid & decorative */
+    --grid-color: rgba(255, 255, 255, 0.06);
 
-    /* Hard shadows - dark mode (more visible) */
-    --shadow-sm: 3px 3px 0px rgba(255, 255, 255, 0.2);
-    --shadow-md: 5px 5px 0px rgba(255, 255, 255, 0.2);
-    --shadow-lg: 8px 8px 0px rgba(255, 255, 255, 0.2);
-    --shadow-xl: 12px 12px 0px rgba(255, 255, 255, 0.2);
+    /* Shadows - subtle */
+    --shadow-sm: 3px 3px 0px rgba(255, 255, 255, 0.1);
+    --shadow-md: 5px 5px 0px rgba(255, 255, 255, 0.1);
+    --shadow-lg: 8px 8px 0px rgba(255, 255, 255, 0.1);
+    --shadow-xl: 12px 12px 0px rgba(255, 255, 255, 0.1);
 
-    /* Semantic - dark (higher contrast for readability) */
+    /* Semantic - softer borders */
     --background: #121212;
     --foreground: #F5F5F5;
     --card: #1E1E1E;
     --card-foreground: #F5F5F5;
     --popover: #252525;
     --popover-foreground: #F5F5F5;
-    --primary: #FFFFFF;
+    --primary: #E8E8E8;
     --primary-foreground: #121212;
     --secondary: #2D2D2D;
     --secondary-foreground: #F5F5F5;
@@ -100,8 +101,9 @@
     --accent-foreground: #121212;
     --destructive: var(--neo-pink);
     --destructive-foreground: #FFFFFF;
-    --border: rgba(255, 255, 255, 0.4);
-    --input: rgba(255, 255, 255, 0.6);
+    --border: rgba(255, 255, 255, 0.15);
+    --border-nav: rgba(255, 255, 255, 0.12);
+    --input: rgba(255, 255, 255, 0.5);
     --ring: var(--neo-cyan);
   }
 }
@@ -111,15 +113,16 @@
     box-sizing: border-box;
   }
   body {
-    font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-body), 'DM Mono', 'Space Grotesk', monospace, sans-serif;
     background-color: var(--background);
     color: var(--foreground);
     line-height: 1.5;
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  /* Brutalist typography */
+  /* Brutalist typography - Space Grotesk for headings */
   h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), 'Space Grotesk', sans-serif;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -231,4 +234,10 @@
 .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
 .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
 .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* Button text contrast - accent buttons always use dark text */
+.btn-accent-text,
+.dark .bg-neo-yellow {
+  color: #121212 !important;
+}
 

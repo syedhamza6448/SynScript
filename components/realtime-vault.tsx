@@ -51,6 +51,38 @@ export function RealtimeVault({ vaultId, children }: RealtimeVaultProps) {
           router.refresh()
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'vault_members',
+          filter: `vault_id=eq.${vaultId}`,
+        },
+        () => {
+          toast({
+            title: 'Collaborator updated',
+            description: 'A collaborator\'s role was changed.',
+          })
+          router.refresh()
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'vault_members',
+          filter: `vault_id=eq.${vaultId}`,
+        },
+        () => {
+          toast({
+            title: 'Collaborator removed',
+            description: 'A collaborator was removed from the vault.',
+          })
+          router.refresh()
+        }
+      )
       .subscribe()
 
     return () => {

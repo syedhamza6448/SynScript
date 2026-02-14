@@ -1,9 +1,17 @@
 import type { Metadata } from 'next'
-import { Space_Grotesk } from 'next/font/google'
+import { Space_Grotesk, DM_Mono } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] })
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-heading',
+})
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  variable: '--font-body',
+})
 
 export const metadata: Metadata = {
   title: 'SynScript - Collaborative Research & Citation Engine',
@@ -16,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={spaceGrotesk.className}>
+    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${dmMono.variable}`}>
+      <body className={dmMono.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

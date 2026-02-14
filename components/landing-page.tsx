@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Button } from '@/components/ui/button'
-import { LandingNavbar } from '@/components/landing-navbar'
+import { SharedNavbar } from '@/components/shared-navbar'
 import {
   Users,
   FileText,
@@ -32,18 +32,18 @@ export function LandingPage() {
       // Hero parallax on load
       gsap.fromTo(
         heroTitleRef.current,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'back.out(1.2)' }
       )
       gsap.fromTo(
         heroSubRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, delay: 0.2, ease: 'power3.out' }
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, delay: 0.2, ease: 'power3.out' }
       )
       gsap.fromTo(
         heroCtaRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, delay: 0.4, ease: 'power3.out' }
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, delay: 0.4, ease: 'elastic.out(1, 0.5)' }
       )
 
       // Floating elements parallax on scroll
@@ -80,6 +80,26 @@ export function LandingPage() {
         })
       }
 
+      // Feature cards - parallax on scroll
+      gsap.utils.toArray<HTMLElement>('.feature-card').forEach((card, i) => {
+        gsap.fromTo(
+          card,
+          { y: 80, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: 'back.out(1.1)',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
+            delay: i * 0.08,
+          }
+        )
+      })
+
       // Step cards animate on scroll into view
       gsap.utils.toArray<HTMLElement>('.step-card').forEach((card, i) => {
         gsap.fromTo(
@@ -89,7 +109,7 @@ export function LandingPage() {
             y: 0,
             opacity: 1,
             duration: 0.6,
-            ease: 'power2.out',
+            ease: 'back.out(1.1)',
             scrollTrigger: {
               trigger: card,
               start: 'top 85%',
@@ -106,8 +126,10 @@ export function LandingPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-background">
-      <LandingNavbar />
+    <div className="min-h-screen bg-background relative">
+      <div className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none z-0" aria-hidden />
+      <div className="relative z-10">
+      <SharedNavbar />
 
       {/* Hero Section */}
       <section
@@ -160,7 +182,7 @@ export function LandingPage() {
             What SynScript Does
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="border-[4px] border-neo-black bg-card p-6 shadow-neo-md hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200">
+            <div className="feature-card border-[4px] border-neo-black bg-card p-6 shadow-neo-md hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200">
               <FolderOpen className="h-12 w-12 mb-4 text-neo-cyan stroke-[2.25]" />
               <h3 className="text-lg font-black uppercase mb-2">Knowledge Vaults</h3>
               <p className="text-muted-foreground font-medium">
@@ -168,7 +190,7 @@ export function LandingPage() {
                 annotations in one place.
               </p>
             </div>
-            <div className="border-[4px] border-neo-black bg-card p-6 shadow-neo-md hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200">
+            <div className="feature-card border-[4px] border-neo-black bg-card p-6 shadow-neo-md hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200">
               <Users className="h-12 w-12 mb-4 text-neo-pink stroke-[2.25]" />
               <h3 className="text-lg font-black uppercase mb-2">Collaborate</h3>
               <p className="text-muted-foreground font-medium">
@@ -176,7 +198,7 @@ export function LandingPage() {
                 who can only read.
               </p>
             </div>
-            <div className="border-[4px] border-neo-black bg-card p-6 shadow-neo-md hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200">
+            <div className="feature-card border-[4px] border-neo-black bg-card p-6 shadow-neo-md hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200">
               <Link2 className="h-12 w-12 mb-4 text-neo-green stroke-[2.25]" />
               <h3 className="text-lg font-black uppercase mb-2">Citations</h3>
               <p className="text-muted-foreground font-medium">
@@ -288,6 +310,7 @@ export function LandingPage() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   )
 }
