@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -25,6 +26,11 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [isSignUp, setIsSignUp] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    if (searchParams.get('signup') === '1') setIsSignUp(true)
+  }, [searchParams])
   const supabase = createClient()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -112,7 +118,7 @@ export default function LoginPage() {
                 ? 'Already have an account? Sign in'
                 : "Don't have an account? Sign up"}
             </button>
-            <Link href="/" className="text-sm font-bold text-muted-foreground border-b-2 border-neo-cyan hover:bg-neo-cyan transition-colors py-1">
+            <Link href="/home" className="text-sm font-bold text-muted-foreground border-b-2 border-neo-cyan hover:bg-neo-cyan transition-colors py-1">
               Back to home
             </Link>
           </CardFooter>

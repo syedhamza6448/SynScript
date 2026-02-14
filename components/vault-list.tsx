@@ -27,7 +27,7 @@ export function VaultList({ vaults }: { vaults: Vault[] }) {
             <CardHeader className="flex flex-row items-start justify-between space-y-0">
               <div className="space-y-1.5">
                 <CardTitle className="flex items-center gap-2">
-                  <FolderOpen className="h-5 w-5" />
+                  <FolderOpen className="h-5 w-5 stroke-[2.25]" />
                   {vault.name}
                 </CardTitle>
                 {vault.description && (

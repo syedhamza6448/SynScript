@@ -28,9 +28,14 @@ export default async function DashboardLayout({
       {accepted.length > 0 && <InviteNotification vaultIds={accepted} />}
       <header className="border-b-[5px] border-neo-black bg-neo-white dark:bg-card shadow-neo-md">
         <div className="container mx-auto flex items-center justify-between min-h-[56px] px-6">
-          <Link href="/vaults" className="font-black text-xl uppercase tracking-wide">
-            SynScript
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/vaults" className="font-black text-xl uppercase tracking-wide hover:opacity-90 transition-opacity">
+              SynScript
+            </Link>
+            <Link href="/home" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors">
+              Home
+            </Link>
+          </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <span className="text-sm font-semibold text-muted-foreground">{user.email}</span>

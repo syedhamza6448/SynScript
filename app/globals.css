@@ -17,7 +17,7 @@
     --neo-bg-light: #FAFAFA;
 
     /* Grid & decorative */
-    --grid-color: rgba(0, 0, 0, 0.08);
+    --grid-color: rgba(0, 0, 0, 0.1);
 
     /* Hard shadows - light mode (black) */
     --shadow-sm: 3px 3px 0px #000;
@@ -62,46 +62,46 @@
   }
 
   .dark {
-    /* Neo Brutalism - Dark mode (inverted, high contrast) */
+    /* Neo Brutalism - Dark mode (improved readability) */
     --neo-yellow: #FFEB3B;
-    --neo-cyan: #26C6DA;
+    --neo-cyan: #4DD0E1;
     --neo-pink: #FF80AB;
     --neo-green: #69F0AE;
     --neo-orange: #FFB74D;
     --neo-purple: #CE93D8;
     --neo-black: #FFFFFF;
-    --neo-white: #1A1A1A;
-    --neo-gray: #2D2D2D;
-    --neo-bg-light: #0D0D0D;
+    --neo-white: #252525;
+    --neo-gray: #3D3D3D;
+    --neo-bg-light: #121212;
 
     /* Grid & decorative - lighter for visibility */
-    --grid-color: rgba(255, 255, 255, 0.06);
+    --grid-color: rgba(255, 255, 255, 0.08);
 
-    /* Hard shadows - dark mode (white/light offset) */
-    --shadow-sm: 3px 3px 0px rgba(255, 255, 255, 0.15);
-    --shadow-md: 5px 5px 0px rgba(255, 255, 255, 0.15);
-    --shadow-lg: 8px 8px 0px rgba(255, 255, 255, 0.15);
-    --shadow-xl: 12px 12px 0px rgba(255, 255, 255, 0.15);
+    /* Hard shadows - dark mode (more visible) */
+    --shadow-sm: 3px 3px 0px rgba(255, 255, 255, 0.2);
+    --shadow-md: 5px 5px 0px rgba(255, 255, 255, 0.2);
+    --shadow-lg: 8px 8px 0px rgba(255, 255, 255, 0.2);
+    --shadow-xl: 12px 12px 0px rgba(255, 255, 255, 0.2);
 
-    /* Semantic - dark */
-    --background: #0D0D0D;
-    --foreground: #FFFFFF;
-    --card: #1A1A1A;
-    --card-foreground: #FFFFFF;
-    --popover: #1A1A1A;
-    --popover-foreground: #FFFFFF;
+    /* Semantic - dark (higher contrast for readability) */
+    --background: #121212;
+    --foreground: #F5F5F5;
+    --card: #1E1E1E;
+    --card-foreground: #F5F5F5;
+    --popover: #252525;
+    --popover-foreground: #F5F5F5;
     --primary: #FFFFFF;
-    --primary-foreground: #0D0D0D;
+    --primary-foreground: #121212;
     --secondary: #2D2D2D;
-    --secondary-foreground: #FFFFFF;
-    --muted: #2D2D2D;
-    --muted-foreground: #A0A0A0;
+    --secondary-foreground: #F5F5F5;
+    --muted: #383838;
+    --muted-foreground: #B0B0B0;
     --accent: var(--neo-yellow);
-    --accent-foreground: #0D0D0D;
+    --accent-foreground: #121212;
     --destructive: var(--neo-pink);
     --destructive-foreground: #FFFFFF;
-    --border: rgba(255, 255, 255, 0.3);
-    --input: rgba(255, 255, 255, 0.5);
+    --border: rgba(255, 255, 255, 0.4);
+    --input: rgba(255, 255, 255, 0.6);
     --ring: var(--neo-cyan);
   }
 }
@@ -231,3 +231,4 @@
 .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
 .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
 .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+
