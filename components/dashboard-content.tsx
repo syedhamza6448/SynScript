@@ -157,7 +157,7 @@ export function DashboardContent({
                         dataKey="value"
                         stroke="black"
                         strokeWidth={2}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                       >
                         {pieData.map((entry, index) => (
                           <Cell key={index} fill={entry.color} />

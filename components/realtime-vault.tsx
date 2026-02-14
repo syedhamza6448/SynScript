@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
@@ -13,12 +13,36 @@ interface RealtimeVaultProps {
 export function RealtimeVault({ vaultId, children }: RealtimeVaultProps) {
   const router = useRouter()
   const { toast } = useToast()
+  const routerRef = useRef(router)
+  const toastRef = useRef(toast)
+  routerRef.current = router
+  toastRef.current = toast
 
   useEffect(() => {
     const supabase = createClient()
 
+    const handleMembersChange = (payload: { eventType: string }) => {
+      if (payload.eventType === 'INSERT') {
+        toastRef.current({
+          title: 'New collaborator',
+          description: 'A new collaborator was added to this vault.',
+        })
+      } else if (payload.eventType === 'UPDATE') {
+        toastRef.current({
+          title: 'Collaborator updated',
+          description: "A collaborator's role was changed.",
+        })
+      } else if (payload.eventType === 'DELETE') {
+        toastRef.current({
+          title: 'Collaborator removed',
+          description: 'A collaborator was removed from the vault.',
+        })
+      }
+      routerRef.current.refresh()
+    }
+
     const sourcesChannel = supabase
-      .channel(`sources:${vaultId}`)
+      .channel(`sources-${vaultId}-${Date.now()}`)
       .on(
         'postgres_changes',
         {
@@ -27,69 +51,37 @@ export function RealtimeVault({ vaultId, children }: RealtimeVaultProps) {
           table: 'sources',
           filter: `vault_id=eq.${vaultId}`,
         },
-        () => {
-          router.refresh()
-        }
+        () => routerRef.current.refresh()
       )
-      .subscribe()
+      .subscribe((status) => {
+        if (status === 'CHANNEL_ERROR') {
+          console.warn('[Realtime] sources subscription error')
+        }
+      })
 
     const membersChannel = supabase
-      .channel(`members:${vaultId}`)
+      .channel(`members-${vaultId}-${Date.now()}`)
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
           table: 'vault_members',
           filter: `vault_id=eq.${vaultId}`,
         },
-        () => {
-          toast({
-            title: 'New collaborator',
-            description: 'A new collaborator was added to this vault.',
-          })
-          router.refresh()
-        }
+        handleMembersChange
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'vault_members',
-          filter: `vault_id=eq.${vaultId}`,
-        },
-        () => {
-          toast({
-            title: 'Collaborator updated',
-            description: 'A collaborator\'s role was changed.',
-          })
-          router.refresh()
+      .subscribe((status) => {
+        if (status === 'CHANNEL_ERROR') {
+          console.warn('[Realtime] vault_members subscription error - ensure table is in supabase_realtime publication and REPLICA IDENTITY FULL is set')
         }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'DELETE',
-          schema: 'public',
-          table: 'vault_members',
-          filter: `vault_id=eq.${vaultId}`,
-        },
-        () => {
-          toast({
-            title: 'Collaborator removed',
-            description: 'A collaborator was removed from the vault.',
-          })
-          router.refresh()
-        }
-      )
-      .subscribe()
+      })
 
     return () => {
       supabase.removeChannel(sourcesChannel)
       supabase.removeChannel(membersChannel)
     }
-  }, [vaultId, router, toast])
+  }, [vaultId])
 
   return <>{children}</>
 }

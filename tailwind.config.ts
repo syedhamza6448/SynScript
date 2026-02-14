@@ -21,6 +21,7 @@ const config: Config = {
         'neo-gray': 'var(--neo-gray)',
         'neo-bg': 'var(--neo-bg-light)',
         border: 'var(--border)',
+        'border-nav': 'var(--border-nav)',
         input: 'var(--input)',
         ring: 'var(--ring)',
         background: 'var(--background)',

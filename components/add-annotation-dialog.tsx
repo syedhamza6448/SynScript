@@ -18,9 +18,11 @@ import { addAnnotation } from '@/app/actions/annotations'
 export function AddAnnotationDialog({
   sourceId,
   vaultId,
+  pageNumber,
 }: {
   sourceId: string
   vaultId: string
+  pageNumber?: number
 }) {
   const [open, setOpen] = useState(false)
   const [note, setNote] = useState('')
@@ -31,7 +33,7 @@ export function AddAnnotationDialog({
     e.preventDefault()
     setLoading(true)
     try {
-      const { error } = await addAnnotation(sourceId, vaultId, note)
+      const { error } = await addAnnotation(sourceId, vaultId, note, pageNumber)
       if (error) throw new Error(error)
       setOpen(false)
       setNote('')

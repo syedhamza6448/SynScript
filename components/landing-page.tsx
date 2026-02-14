@@ -25,31 +25,49 @@ export function LandingPage() {
   const float1Ref = useRef<HTMLDivElement>(null)
   const float2Ref = useRef<HTMLDivElement>(null)
   const float3Ref = useRef<HTMLDivElement>(null)
-  const stepsRef = useRef<HTMLDivElement>(null)
+  const float4Ref = useRef<HTMLDivElement>(null)
+  const sectionTitleRef = useRef<HTMLHeadingElement>(null)
+  const stepsRef = useRef<HTMLElement>(null)
+  const stepsTitleRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero parallax on load
-      gsap.fromTo(
-        heroTitleRef.current,
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'back.out(1.2)' }
-      )
+      // Split-text style hero title - stagger letters
+      if (heroTitleRef.current) {
+        const text = heroTitleRef.current.textContent || ''
+        heroTitleRef.current.innerHTML = text
+          .split('')
+          .map((c) => `<span class="inline-block hero-letter">${c === ' ' ? '&nbsp;' : c}</span>`)
+          .join('')
+        gsap.fromTo(
+          '.hero-letter',
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            ease: 'back.out(1.4)',
+            stagger: 0.05,
+          }
+        )
+      }
+
       gsap.fromTo(
         heroSubRef.current,
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, delay: 0.2, ease: 'power3.out' }
+        { y: 0, opacity: 1, duration: 0.9, delay: 0.4, ease: 'power3.out' }
       )
       gsap.fromTo(
         heroCtaRef.current,
         { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, delay: 0.4, ease: 'elastic.out(1, 0.5)' }
+        { y: 0, opacity: 1, duration: 0.7, delay: 0.7, ease: 'elastic.out(1, 0.5)' }
       )
 
-      // Floating elements parallax on scroll
+      // 2D parallax - x and y movement on scroll
       if (heroRef.current) {
         gsap.to(float1Ref.current, {
-          y: 60,
+          y: 80,
+          x: -30,
           ease: 'none',
           scrollTrigger: {
             trigger: heroRef.current,
@@ -59,17 +77,30 @@ export function LandingPage() {
           },
         })
         gsap.to(float2Ref.current, {
-          y: 100,
+          y: 120,
+          x: 40,
           ease: 'none',
           scrollTrigger: {
             trigger: heroRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: 1.2,
           },
         })
         gsap.to(float3Ref.current, {
-          y: 40,
+          y: 60,
+          x: -20,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.8,
+          },
+        })
+        gsap.to(float4Ref.current, {
+          y: -40,
+          x: -50,
           ease: 'none',
           scrollTrigger: {
             trigger: heroRef.current,
@@ -80,13 +111,50 @@ export function LandingPage() {
         })
       }
 
-      // Feature cards - parallax on scroll
+      // Section headings - scroll-triggered reveal
+      if (sectionTitleRef.current) {
+        gsap.fromTo(
+          sectionTitleRef.current,
+          { x: -40, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: sectionTitleRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+      if (stepsTitleRef.current) {
+        gsap.fromTo(
+          stepsTitleRef.current,
+          { x: 40, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: stepsTitleRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      }
+
+      // Feature cards - parallax + horizontal offset on scroll, hover scale
       gsap.utils.toArray<HTMLElement>('.feature-card').forEach((card, i) => {
         gsap.fromTo(
           card,
-          { y: 80, opacity: 0 },
+          { y: 80, x: (i - 1) * 30, opacity: 0 },
           {
             y: 0,
+            x: 0,
             opacity: 1,
             duration: 0.7,
             ease: 'back.out(1.1)',
@@ -98,9 +166,15 @@ export function LandingPage() {
             delay: i * 0.08,
           }
         )
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card, { scale: 1.02, duration: 0.2, ease: 'power2.out' })
+        })
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, { scale: 1, duration: 0.2, ease: 'power2.out' })
+        })
       })
 
-      // Step cards animate on scroll into view
+      // Step cards - scroll trigger + UI interaction
       gsap.utils.toArray<HTMLElement>('.step-card').forEach((card, i) => {
         gsap.fromTo(
           card,
@@ -113,12 +187,17 @@ export function LandingPage() {
             scrollTrigger: {
               trigger: card,
               start: 'top 85%',
-              end: 'top 50%',
               toggleActions: 'play none none none',
             },
             delay: i * 0.1,
           }
         )
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card, { x: 8, duration: 0.2, ease: 'power2.out' })
+        })
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, { x: 0, duration: 0.2, ease: 'power2.out' })
+        })
       })
     })
 
@@ -136,7 +215,7 @@ export function LandingPage() {
         ref={heroRef}
         className="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden px-4 py-20"
       >
-        {/* Background parallax shapes */}
+        {/* 2D parallax background shapes */}
         <div
           ref={float1Ref}
           className="absolute top-20 left-[10%] w-24 h-24 border-[4px] border-neo-cyan opacity-20 dark:opacity-15 pointer-events-none"
@@ -148,6 +227,10 @@ export function LandingPage() {
         <div
           ref={float3Ref}
           className="absolute bottom-32 left-[20%] w-20 h-20 border-[4px] border-neo-pink opacity-20 dark:opacity-15 pointer-events-none"
+        />
+        <div
+          ref={float4Ref}
+          className="absolute top-1/3 right-[8%] w-16 h-16 border-[4px] border-neo-green opacity-15 dark:opacity-10 pointer-events-none"
         />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
@@ -178,7 +261,7 @@ export function LandingPage() {
       {/* What SynScript Does */}
       <section className="py-20 px-4 border-t-[5px] border-neo-black">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl font-black uppercase mb-12 text-center border-l-8 border-neo-yellow pl-4 inline-block">
+          <h2 ref={sectionTitleRef} className="text-3xl md:text-4xl font-black uppercase mb-12 text-center border-l-8 border-neo-yellow pl-4 inline-block">
             What SynScript Does
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -217,7 +300,7 @@ export function LandingPage() {
         className="py-20 px-4 bg-secondary/30 border-t-[5px] border-neo-black"
       >
         <div className="container mx-auto max-w-4xl">
-          <h2 className="text-3xl md:text-4xl font-black uppercase mb-12 text-center">
+          <h2 ref={stepsTitleRef} className="text-3xl md:text-4xl font-black uppercase mb-12 text-center">
             How to Use SynScript
           </h2>
           <div className="space-y-6">
@@ -290,26 +373,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t-[5px] border-neo-black py-12 px-4">
-        <div className="container mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="font-black text-lg uppercase">SynScript</span>
-          <div className="flex gap-6">
-            <Link
-              href="/login"
-              className="font-bold text-sm hover:opacity-80 transition-opacity"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/login?signup=1"
-              className="font-bold text-sm hover:opacity-80 transition-opacity"
-            >
-              Sign up
-            </Link>
-          </div>
-        </div>
-      </footer>
       </div>
     </div>
   )

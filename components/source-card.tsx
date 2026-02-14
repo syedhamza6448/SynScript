@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   Card,
   CardContent,
@@ -77,15 +78,14 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
               </a>
             )}
             {(source.pdf_url || source.file_path) && (
-              <a
-                href={source.pdf_url || source.file_path || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={`/vaults/${vaultId}/pdf/${source.id}`}
+                prefetch={false}
                 className="text-sm font-bold text-neo-black border-b-2 border-neo-cyan hover:bg-neo-cyan flex items-center gap-1 transition-colors"
               >
                 <FileText className="h-4 w-4" />
                 View PDF
-              </a>
+              </Link>
             )}
           </div>
         </div>

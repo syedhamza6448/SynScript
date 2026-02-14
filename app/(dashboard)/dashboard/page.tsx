@@ -23,11 +23,11 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
     .order('joined_at', { ascending: false })
 
-  const vaults = (memberships ?? [])
-    .map((m: { role: string; vaults: { id: string; name: string; description: string | null; created_at: string; owner_id: string } | null }) =>
-      m.vaults ? { ...m.vaults, role: m.role } : null
-    )
-    .filter(Boolean) as { id: string; name: string; description: string | null; created_at: string; owner_id: string; role: string }[]
+  type VaultRow = { id: string; name: string; description: string | null; created_at: string; owner_id: string }
+  const vaults = (memberships ?? []).flatMap((m: { role: string; vaults: VaultRow | VaultRow[] | null }) => {
+    const v = Array.isArray(m.vaults) ? m.vaults[0] : m.vaults
+    return v ? [{ ...v, role: m.role }] : []
+  }) as { id: string; name: string; description: string | null; created_at: string; owner_id: string; role: string }[]
 
   const ownedVaultIds = vaults.filter((v) => v.role === 'owner').map((v) => v.id)
   let sourcesCount: { vault_id: string; count: number }[] = []

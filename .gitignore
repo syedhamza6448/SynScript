@@ -47,3 +47,7 @@ coverage
 
 # Vercel
 .vercel
+
+# Markdown docs (keep README.md)
+*.md
+!README.md

@@ -6,7 +6,8 @@ import { revalidatePath } from 'next/cache'
 export async function addAnnotation(
   sourceId: string,
   vaultId: string,
-  note: string
+  note: string,
+  pageNumber?: number
 ) {
   if (!note.trim()) return { error: 'Note is required' }
 
@@ -37,6 +38,7 @@ export async function addAnnotation(
     source_id: sourceId,
     user_id: user.id,
     note: note.trim(),
+    ...(pageNumber != null && pageNumber > 0 && { page_number: pageNumber }),
   })
 
   if (error) return { error: error.message }
