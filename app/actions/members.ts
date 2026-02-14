@@ -55,3 +55,83 @@ export async function inviteMember(
   revalidatePath(`/vaults/${vaultId}`)
   return {}
 }
+
+export async function updateMemberRole(
+  vaultId: string,
+  memberId: string,
+  newRole: 'contributor' | 'viewer'
+) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const { data: me } = await supabase
+    .from('vault_members')
+    .select('role')
+    .eq('vault_id', vaultId)
+    .eq('user_id', user.id)
+    .single()
+
+  if (me?.role !== 'owner') {
+    return { error: 'Only owners can change member roles' }
+  }
+
+  const { data: target } = await supabase
+    .from('vault_members')
+    .select('role')
+    .eq('id', memberId)
+    .eq('vault_id', vaultId)
+    .single()
+
+  if (!target) return { error: 'Member not found' }
+  if (target.role === 'owner') return { error: 'Cannot change owner role' }
+
+  const { error } = await supabase
+    .from('vault_members')
+    .update({ role: newRole })
+    .eq('id', memberId)
+    .eq('vault_id', vaultId)
+
+  if (error) return { error: error.message }
+  await logAudit(vaultId, 'member_role_updated', { member_id: memberId, new_role: newRole })
+  revalidatePath(`/vaults/${vaultId}`)
+  return {}
+}
+
+export async function removeMember(vaultId: string, memberId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const { data: me } = await supabase
+    .from('vault_members')
+    .select('role')
+    .eq('vault_id', vaultId)
+    .eq('user_id', user.id)
+    .single()
+
+  if (me?.role !== 'owner') {
+    return { error: 'Only owners can remove members' }
+  }
+
+  const { data: target } = await supabase
+    .from('vault_members')
+    .select('role')
+    .eq('id', memberId)
+    .eq('vault_id', vaultId)
+    .single()
+
+  if (!target) return { error: 'Member not found' }
+  if (target.role === 'owner') return { error: 'Cannot remove vault owner' }
+
+  const { error } = await supabase
+    .from('vault_members')
+    .delete()
+    .eq('id', memberId)
+    .eq('vault_id', vaultId)
+
+  if (error) return { error: error.message }
+  await logAudit(vaultId, 'member_removed', { member_id: memberId })
+  revalidatePath(`/vaults/${vaultId}`)
+  return {}
+}

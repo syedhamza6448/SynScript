@@ -20,7 +20,7 @@ interface Vault {
 
 export function VaultList({ vaults }: { vaults: Vault[] }) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 stagger-children">
       {vaults.map((vault) => (
         <Link key={vault.id} href={`/vaults/${vault.id}`}>
           <Card className="hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-xl transition-all cursor-pointer h-full">

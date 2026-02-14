@@ -1,8 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { getVaultRole } from '@/lib/auth/rbac'
+import { getMembersWithEmails } from '@/lib/members'
 import { VaultDetail } from '@/components/vault-detail'
 import { InviteMemberDialog } from '@/components/invite-member-dialog'
+import { VaultCollaborators } from '@/components/vault-collaborators'
 import { RealtimeVault } from '@/components/realtime-vault'
 
 export default async function VaultPage({
@@ -57,10 +59,12 @@ export default async function VaultPage({
     })
   )
 
-  const { data: members } = await supabase
+  const { data: rawMembers } = await supabase
     .from('vault_members')
     .select('id, role, user_id')
     .eq('vault_id', id)
+
+  const members = await getMembersWithEmails(rawMembers ?? [])
 
   return (
     <RealtimeVault vaultId={id}>
@@ -77,12 +81,20 @@ export default async function VaultPage({
           )}
         </div>
 
-        <VaultDetail
-          vaultId={id}
-          sources={sources ?? []}
-          role={role}
-          members={members ?? []}
-        />
+        <div className="grid gap-8 lg:grid-cols-[1fr,300px]">
+          <VaultDetail
+            vaultId={id}
+            sources={sources ?? []}
+            role={role}
+            members={members}
+          />
+          <VaultCollaborators
+            vaultId={id}
+            members={members}
+            currentUserId={user.id}
+            isOwner={role === 'owner'}
+          />
+        </div>
       </div>
     </RealtimeVault>
   )

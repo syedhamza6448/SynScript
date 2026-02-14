@@ -60,7 +60,7 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
   }
 
   return (
-    <Card className="shadow-neo-md">
+    <Card className="shadow-neo-md hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-neo-lg transition-all duration-150">
       <CardHeader className="flex flex-row items-start justify-between space-y-0">
         <div className="space-y-1.5 flex-1">
           <CardTitle className="text-lg">{source.title}</CardTitle>

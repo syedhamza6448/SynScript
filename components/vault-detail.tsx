@@ -3,7 +3,7 @@
 import { AddSourceDialog } from './add-source-dialog'
 import { SourceCard } from './source-card'
 import { Button } from '@/components/ui/button'
-import { Plus, Users } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import type { VaultRole } from '@/lib/auth/rbac'
 
 interface Annotation {
@@ -46,23 +46,17 @@ export function VaultDetail({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h2 className="text-xl font-black uppercase">Sources</h2>
-          <span className="text-sm text-muted-foreground flex items-center gap-1">
-            <Users className="h-4 w-4" />
-            {members.length} member{members.length !== 1 ? 's' : ''}
-          </span>
-        </div>
+        <h2 className="text-xl font-black uppercase">Sources</h2>
         {canEdit && <AddSourceDialog vaultId={vaultId} />}
       </div>
 
       {sources.length === 0 ? (
-        <div className="border-[4px] border-neo-black bg-neo-white p-12 text-center text-muted-foreground font-medium shadow-neo-md">
+        <div className="border-[4px] border-neo-black bg-card p-12 text-center text-muted-foreground font-medium shadow-neo-md">
           <p className="mb-4">No sources yet. Add your first research source.</p>
           {canEdit && <AddSourceDialog vaultId={vaultId} />}
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-4 stagger-children">
           {sources.map((source) => (
             <SourceCard
               key={source.id}

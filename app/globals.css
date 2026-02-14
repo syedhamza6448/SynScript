@@ -180,3 +180,54 @@
     linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+/* Neo Brutalism animations */
+@keyframes neo-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes neo-pulse-border {
+  0%, 100% { box-shadow: var(--shadow-md); }
+  50% { box-shadow: var(--shadow-lg); }
+}
+
+@keyframes neo-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes neo-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.animate-neo-bounce {
+  animation: neo-bounce 0.4s ease;
+}
+
+.animate-neo-slide-up {
+  animation: neo-slide-up 0.25s ease-out;
+}
+
+.animate-neo-pop {
+  animation: neo-pop 0.2s ease;
+}
+
+/* Stagger children for list animations */
+.stagger-children > * {
+  animation: neo-slide-up 0.3s ease-out both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }

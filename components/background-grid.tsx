@@ -10,84 +10,28 @@ interface BackgroundGridProps {
 export function BackgroundGrid({ className, children }: BackgroundGridProps) {
   return (
     <div className={cn('relative min-h-screen overflow-hidden', className)}>
-      {/* Grid pattern - uses CSS variable for theme-aware color */}
-      <div
-        className="absolute inset-0 bg-grid-pattern"
-        aria-hidden
-      />
+      {/* Subtle grid - clean, low contrast */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-80" aria-hidden />
 
-      {/* Decorative geometric vectors - corners and accents */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-        {/* Top-left corner L shape */}
-        <svg
-          className="absolute top-0 left-0 w-48 h-48 md:w-64 md:h-64 text-neo-cyan dark:text-neo-cyan/60"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-        >
-          <line x1="0" y1="20" x2="80" y2="20" />
-          <line x1="20" y1="0" x2="20" y2="80" />
+      {/* SRS-themed vectors: research, vault, citation - minimal & playful */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.04] dark:opacity-[0.06]" aria-hidden>
+        {/* Book icon - top left (research) */}
+        <svg className="absolute top-16 left-16 w-20 h-20 text-neo-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          <line x1="12" y1="6" x2="12" y2="14" />
         </svg>
-
-        {/* Bottom-right corner L shape */}
-        <svg
-          className="absolute bottom-0 right-0 w-48 h-48 md:w-64 md:h-64 text-neo-pink dark:text-neo-pink/60"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-        >
-          <line x1="20" y1="80" x2="100" y2="80" />
-          <line x1="80" y1="20" x2="80" y2="100" />
+        {/* Link icon - bottom right (citation) */}
+        <svg className="absolute bottom-20 right-20 w-16 h-16 text-neo-pink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
         </svg>
-
-        {/* Top-right accent */}
-        <svg
-          className="absolute top-12 right-12 w-24 h-24 md:w-32 md:h-32 text-neo-yellow dark:text-neo-yellow/50"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <rect x="10" y="10" width="80" height="80" />
-        </svg>
-
-        {/* Bottom-left accent */}
-        <svg
-          className="absolute bottom-24 left-8 w-20 h-20 md:w-28 md:h-28 text-neo-cyan dark:text-neo-cyan/50"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <polygon points="50,5 95,95 5,95" />
-        </svg>
-
-        {/* Center-right floating square */}
-        <svg
-          className="absolute top-1/2 right-[15%] -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 text-neo-orange dark:text-neo-orange/40"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <rect x="25" y="25" width="50" height="50" transform="rotate(45 50 50)" />
-        </svg>
-
-        {/* Center-left floating shape */}
-        <svg
-          className="absolute top-1/3 left-[10%] w-12 h-12 md:w-16 md:h-16 text-neo-green dark:text-neo-green/40"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <circle cx="50" cy="50" r="40" />
+        {/* Folder icon - top right (vault) */}
+        <svg className="absolute top-24 right-24 w-14 h-14 text-neo-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
         </svg>
       </div>
 
-      {/* Content layer */}
       <div className="relative z-10">{children}</div>
     </div>
   )
