@@ -17,10 +17,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreVertical, ExternalLink, FileText, Trash2 } from 'lucide-react'
+import { MoreVertical, ExternalLink, FileText, Trash2, Pencil } from 'lucide-react'
 import { deleteSource } from '@/app/actions/sources'
 import { AddAnnotationDialog } from './add-annotation-dialog'
+import { EditSourceDialog } from './edit-source-dialog'
 import { UploadPdfDialog } from './upload-pdf-dialog'
+import { SourceDiscussion } from './source-discussion'
 
 interface Annotation {
   id: string
@@ -43,10 +45,14 @@ interface SourceCardProps {
   source: Source
   vaultId: string
   canEdit: boolean
+  selectable?: boolean
+  selected?: boolean
+  onSelectChange?: () => void
 }
 
-export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
+export function SourceCard({ source, vaultId, canEdit, selectable, selected, onSelectChange }: SourceCardProps) {
   const [deleting, setDeleting] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
   const router = useRouter()
 
   async function handleDelete() {
@@ -61,9 +67,19 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
   }
 
   return (
-    <Card className="shadow-neo-md hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-neo-lg transition-all duration-150">
+    <Card className={`shadow-neo-md hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-neo-lg transition-all duration-150 ${selected ? 'ring-2 ring-neo-cyan' : ''}`}>
       <CardHeader className="flex flex-row items-start justify-between space-y-0">
-        <div className="space-y-1.5 flex-1">
+        <div className="space-y-1.5 flex-1 flex items-start gap-2">
+          {selectable && onSelectChange && (
+            <input
+              type="checkbox"
+              checked={selected ?? false}
+              onChange={onSelectChange}
+              className="mt-1 h-4 w-4 rounded border-neo-black"
+              aria-label={`Select ${source.title}`}
+            />
+          )}
+          <div className="flex-1 min-w-0">
           <CardTitle className="text-lg">{source.title}</CardTitle>
           <div className="flex flex-wrap gap-2">
             {source.url && (
@@ -88,6 +104,7 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
               </Link>
             )}
           </div>
+          </div>
         </div>
         {canEdit && (
           <DropdownMenu>
@@ -97,6 +114,18 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onSelect={() => setEditOpen(true)}>
+                <Pencil className="h-4 w-4 mr-2" />
+                Edit
+              </DropdownMenuItem>
+              <EditSourceDialog
+                vaultId={vaultId}
+                sourceId={source.id}
+                initialTitle={source.title}
+                initialUrl={source.url}
+                open={editOpen}
+                onOpenChange={setEditOpen}
+              />
               <DropdownMenuItem
                 className="text-destructive"
                 onClick={handleDelete}
@@ -127,6 +156,7 @@ export function SourceCard({ source, vaultId, canEdit }: SourceCardProps) {
         ) : (
           <p className="text-sm text-muted-foreground">No annotations yet.</p>
         )}
+        <SourceDiscussion vaultId={vaultId} sourceId={source.id} canEdit={canEdit} />
         <div className="flex gap-2 flex-wrap">
           {canEdit && (
             <>

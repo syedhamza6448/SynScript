@@ -10,6 +10,23 @@ interface RealtimeVaultProps {
   children: React.ReactNode
 }
 
+function showBrowserNotification(title: string, body: string) {
+  if (typeof window === 'undefined' || !('Notification' in window)) return
+  if (Notification.permission === 'granted') {
+    try {
+      new Notification(title, { body })
+    } catch {
+      // ignore
+    }
+    return
+  }
+  if (Notification.permission === 'default') {
+    Notification.requestPermission().then((p) => {
+      if (p === 'granted') try { new Notification(title, { body }) } catch { /* ignore */ }
+    })
+  }
+}
+
 export function RealtimeVault({ vaultId, children }: RealtimeVaultProps) {
   const router = useRouter()
   const { toast } = useToast()
@@ -27,6 +44,7 @@ export function RealtimeVault({ vaultId, children }: RealtimeVaultProps) {
           title: 'New collaborator',
           description: 'A new collaborator was added to this vault.',
         })
+        showBrowserNotification('SyncScript: New collaborator', 'A new collaborator was added to this vault.')
       } else if (payload.eventType === 'UPDATE') {
         toastRef.current({
           title: 'Collaborator updated',

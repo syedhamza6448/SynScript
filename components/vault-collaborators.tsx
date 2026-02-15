@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Edit2, Eye, MoreVertical, Trash2, User } from 'lucide-react'
 import { updateMemberRole, removeMember } from '@/app/actions/members'
 import { useToast } from '@/hooks/use-toast'
+import { useVaultPresence } from '@/lib/vault-presence-context'
 
 export type MemberWithEmail = {
   id: string
@@ -36,6 +37,7 @@ export function VaultCollaborators({
   const router = useRouter()
   const { toast } = useToast()
   const [loading, setLoading] = useState<string | null>(null)
+  const activeUserIds = useVaultPresence()
 
   async function handleChangeRole(memberId: string, newRole: 'contributor' | 'viewer') {
     setLoading(memberId)
@@ -71,9 +73,9 @@ export function VaultCollaborators({
   }
 
   return (
-    <div className="border-[4px] border-neo-black bg-card p-4 shadow-neo-md animate-neo-slide-up">
-      <h3 className="text-sm font-black uppercase mb-3 flex items-center gap-2">
-        <User className="h-4 w-4" />
+    <div className="border-[4px] border-neo-black bg-card p-3 sm:p-4 shadow-neo-md animate-neo-slide-up">
+      <h3 className="text-xs sm:text-sm font-black uppercase mb-3 flex items-center gap-2">
+        <User className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
         Collaborators
       </h3>
       <ul className="space-y-2 stagger-children">
@@ -83,8 +85,16 @@ export function VaultCollaborators({
             className="flex items-center justify-between gap-2 py-2 px-3 border-[2px] border-neo-black bg-secondary/50 hover:bg-secondary hover:-translate-x-[1px] hover:shadow-neo-sm transition-all duration-150"
           >
             <div className="flex items-center gap-3 min-w-0">
-              <span className="text-sm font-bold truncate" title={m.email ?? undefined}>
-                {m.email ?? `User ${m.user_id.slice(0, 8)}...`}
+              <span className="relative inline-flex items-center gap-2">
+                <span className="text-sm font-bold truncate" title={m.email ?? undefined}>
+                  {m.email ?? `User ${m.user_id.slice(0, 8)}...`}
+                </span>
+                {activeUserIds.has(m.user_id) && (
+                  <span
+                    className="shrink-0 w-2 h-2 rounded-full bg-green-500 border-2 border-background shadow-sm animate-pulse"
+                    title="Active now"
+                  />
+                )}
               </span>
               <span
                 className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold uppercase shrink-0 ${

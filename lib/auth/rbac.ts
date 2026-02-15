@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getCachedVaultRole, setCachedVaultRole } from '@/lib/cache'
 
 export type VaultRole = 'owner' | 'contributor' | 'viewer'
 
@@ -7,6 +8,8 @@ export async function getVaultRole(
   userId: string | undefined
 ): Promise<VaultRole | null> {
   if (!userId) return null
+  const cached = await getCachedVaultRole(vaultId, userId)
+  if (cached) return cached
   const supabase = await createClient()
   const { data } = await supabase
     .from('vault_members')
@@ -14,7 +17,9 @@ export async function getVaultRole(
     .eq('vault_id', vaultId)
     .eq('user_id', userId)
     .single()
-  return (data?.role as VaultRole) ?? null
+  const role = (data?.role as VaultRole) ?? null
+  if (role) await setCachedVaultRole(vaultId, userId, role)
+  return role
 }
 
 export async function canWriteVault(

@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { logAudit } from '@/lib/audit'
+import { invalidateVaultRole } from '@/lib/cache'
 
 export async function inviteMember(
   vaultId: string,
@@ -43,6 +44,7 @@ export async function inviteMember(
       return { error: error.message }
     }
     await logAudit(vaultId, 'member_added', { email, role })
+    await invalidateVaultRole(vaultId, targetUser.id)
   } else {
     // User doesn't exist yet - store invite for when they sign up
     const { error } = await supabase.from('vault_invites').upsert(
@@ -78,7 +80,7 @@ export async function updateMemberRole(
 
   const { data: target } = await supabase
     .from('vault_members')
-    .select('role')
+    .select('user_id, role')
     .eq('id', memberId)
     .eq('vault_id', vaultId)
     .single()
@@ -93,6 +95,7 @@ export async function updateMemberRole(
     .eq('vault_id', vaultId)
 
   if (error) return { error: error.message }
+  await invalidateVaultRole(vaultId, target.user_id)
   await logAudit(vaultId, 'member_role_updated', { member_id: memberId, new_role: newRole })
   revalidatePath(`/vaults/${vaultId}`)
   return {}
@@ -116,7 +119,7 @@ export async function removeMember(vaultId: string, memberId: string) {
 
   const { data: target } = await supabase
     .from('vault_members')
-    .select('role')
+    .select('user_id, role')
     .eq('id', memberId)
     .eq('vault_id', vaultId)
     .single()
@@ -131,6 +134,7 @@ export async function removeMember(vaultId: string, memberId: string) {
     .eq('vault_id', vaultId)
 
   if (error) return { error: error.message }
+  await invalidateVaultRole(vaultId, target.user_id)
   await logAudit(vaultId, 'member_removed', { member_id: memberId })
   revalidatePath(`/vaults/${vaultId}`)
   return {}

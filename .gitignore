@@ -51,3 +51,8 @@ coverage
 # Markdown docs (keep README.md)
 *.md
 !README.md
+TODO.md
+FIX.md
+neo-brutalism-implementation-guide.md
+SynScript-SRS.pdf
+SynScript-SRS.json

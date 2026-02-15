@@ -45,3 +45,80 @@ export async function addAnnotation(
   revalidatePath(`/vaults/${vaultId}`)
   return {}
 }
+
+export async function updateAnnotation(
+  annotationId: string,
+  vaultId: string,
+  note: string,
+  pageNumber?: number
+) {
+  if (!note.trim()) return { error: 'Note is required' }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const { data: ann } = await supabase
+    .from('annotations')
+    .select('id, source_id, user_id')
+    .eq('id', annotationId)
+    .single()
+
+  if (!ann || ann.user_id !== user.id) return { error: 'Annotation not found or you can only edit your own' }
+
+  const { data: source } = await supabase
+    .from('sources')
+    .select('vault_id')
+    .eq('id', ann.source_id)
+    .single()
+
+  if (!source || source.vault_id !== vaultId) return { error: 'Source not found' }
+
+  const { error } = await supabase
+    .from('annotations')
+    .update({
+      note: note.trim(),
+      ...(pageNumber != null && pageNumber > 0 && { page_number: pageNumber }),
+    })
+    .eq('id', annotationId)
+    .eq('user_id', user.id)
+
+  if (error) return { error: error.message }
+  revalidatePath(`/vaults/${vaultId}`)
+  revalidatePath(`/vaults/${vaultId}/pdf/${ann.source_id}`)
+  return {}
+}
+
+export async function deleteAnnotation(annotationId: string, vaultId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const { data: ann } = await supabase
+    .from('annotations')
+    .select('id, source_id')
+    .eq('id', annotationId)
+    .eq('user_id', user.id)
+    .single()
+
+  if (!ann) return { error: 'Annotation not found or you can only delete your own' }
+
+  const { data: source } = await supabase
+    .from('sources')
+    .select('vault_id')
+    .eq('id', ann.source_id)
+    .single()
+
+  if (!source || source.vault_id !== vaultId) return { error: 'Source not found' }
+
+  const { error } = await supabase
+    .from('annotations')
+    .delete()
+    .eq('id', annotationId)
+    .eq('user_id', user.id)
+
+  if (error) return { error: error.message }
+  revalidatePath(`/vaults/${vaultId}`)
+  revalidatePath(`/vaults/${vaultId}/pdf/${ann.source_id}`)
+  return {}
+}

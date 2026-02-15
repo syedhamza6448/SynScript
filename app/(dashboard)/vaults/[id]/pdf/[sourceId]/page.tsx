@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { PdfViewer } from '@/components/pdf-viewer'
+import { RealtimeAnnotations } from '@/components/realtime-annotations'
 
 export default async function PdfViewerPage({
   params,
@@ -37,7 +38,7 @@ export default async function PdfViewerPage({
 
   const { data: annotations } = await supabase
     .from('annotations')
-    .select('id, note, user_id, created_at')
+    .select('id, note, user_id, created_at, page_number')
     .eq('source_id', sourceId)
     .order('created_at', { ascending: true })
 
@@ -53,14 +54,17 @@ export default async function PdfViewerPage({
           </Link>
         </Button>
       </div>
-      <PdfViewer
-        pdfUrl={pdfUrl}
-        sourceId={sourceId}
-        sourceTitle={source.title}
-        vaultId={vaultId}
-        canEdit={canEdit}
-        annotations={annotations ?? []}
-      />
+      <RealtimeAnnotations sourceId={sourceId}>
+        <PdfViewer
+          pdfUrl={pdfUrl}
+          sourceId={sourceId}
+          sourceTitle={source.title}
+          vaultId={vaultId}
+          canEdit={canEdit}
+          currentUserId={user.id}
+          annotations={annotations ?? []}
+        />
+      </RealtimeAnnotations>
     </div>
   )
 }

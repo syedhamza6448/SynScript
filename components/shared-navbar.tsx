@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import { Button } from '@/components/ui/button'
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { User as UserIcon, LayoutDashboard, FolderOpen, LogOut, Settings, Menu, X } from 'lucide-react'
 import { signOutAction } from '@/app/actions/auth'
+import { VaultNotificationBell } from '@/components/vault-notification-bell'
 
 interface SharedNavbarProps {
   variant?: 'default' | 'minimal'
@@ -23,6 +25,8 @@ export function SharedNavbar({ variant = 'default' }: SharedNavbarProps) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+  const isVaultPage = pathname?.match(/^\/vaults\/[a-f0-9-]+(?:\/|$)/i)
 
   useEffect(() => {
     const supabase = createClient()
@@ -52,6 +56,7 @@ export function SharedNavbar({ variant = 'default' }: SharedNavbarProps) {
           Vaults
         </Button>
       </Link>
+      {isVaultPage && <VaultNotificationBell />}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="gap-2">
@@ -96,6 +101,12 @@ export function SharedNavbar({ variant = 'default' }: SharedNavbarProps) {
 
   const mobileNav = user ? (
     <>
+      {isVaultPage && (
+        <div className="flex items-center gap-2 py-2 px-3">
+          <VaultNotificationBell />
+          <span className="text-sm font-bold">Recent changes</span>
+        </div>
+      )}
       <Link href="/dashboard" onClick={closeMobile} className="block py-2 px-3 font-bold text-sm border-b-2 border-transparent hover:border-neo-cyan hover:bg-secondary/50">
         <LayoutDashboard className="h-4 w-4 mr-2 inline" />
         Dashboard

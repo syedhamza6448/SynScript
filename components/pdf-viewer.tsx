@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, MessageSquare, ExternalLink, Maximize, Minimize } from 'lucide-react'
 import { AddAnnotationDialog } from './add-annotation-dialog'
+import { EditAnnotationDialog } from './edit-annotation-dialog'
+import { DeleteAnnotationButton } from './delete-annotation-button'
 import { NeoLoader } from './neo-loader'
 
 interface Annotation {
@@ -20,6 +22,7 @@ interface PdfViewerProps {
   sourceTitle: string
   vaultId: string
   canEdit: boolean
+  currentUserId?: string
   annotations?: Annotation[]
 }
 
@@ -36,6 +39,7 @@ export function PdfViewer({
   sourceTitle,
   vaultId,
   canEdit,
+  currentUserId,
   annotations = [],
 }: PdfViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -361,9 +365,23 @@ export function PdfViewer({
             {pageAnnotations.map((ann) => (
               <li
                 key={ann.id}
-                className="text-sm p-2 font-medium bg-card border-l-4 border-neo-cyan"
+                className="text-sm p-2 font-medium bg-card border-l-4 border-neo-cyan flex items-center justify-between gap-2"
               >
-                {ann.note}
+                <span className="flex-1">{ann.note}</span>
+                {canEdit && currentUserId && ann.user_id === currentUserId && (
+                  <span className="flex items-center gap-1 shrink-0">
+                    <EditAnnotationDialog
+                      annotationId={ann.id}
+                      vaultId={vaultId}
+                      initialNote={ann.note}
+                      pageNumber={pageNumber}
+                    />
+                    <DeleteAnnotationButton
+                      annotationId={ann.id}
+                      vaultId={vaultId}
+                    />
+                  </span>
+                )}
               </li>
             ))}
           </ul>

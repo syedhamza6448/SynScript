@@ -1,11 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
+import Link from 'next/link'
 import { getVaultRole } from '@/lib/auth/rbac'
 import { getMembersWithEmails } from '@/lib/members'
+import { Button } from '@/components/ui/button'
 import { VaultDetail } from '@/components/vault-detail'
 import { InviteMemberDialog } from '@/components/invite-member-dialog'
 import { VaultCollaborators } from '@/components/vault-collaborators'
 import { RealtimeVault } from '@/components/realtime-vault'
+import { VaultPresenceProvider } from '@/lib/vault-presence-context'
 
 export default async function VaultPage({
   params,
@@ -68,20 +71,26 @@ export default async function VaultPage({
 
   return (
     <RealtimeVault vaultId={id}>
-      <div className="container mx-auto py-8 px-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-4xl font-black uppercase border-l-8 border-neo-cyan pl-4">{vault.name}</h1>
+      <VaultPresenceProvider vaultId={id} currentUserId={user.id}>
+      <div className="container mx-auto py-6 sm:py-8 px-3 sm:px-4 md:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase border-l-4 sm:border-l-8 border-neo-cyan pl-3 sm:pl-4 truncate" title={vault.name}>{vault.name}</h1>
             {vault.description && (
               <p className="text-muted-foreground mt-2 font-medium">{vault.description}</p>
             )}
           </div>
-          {role === 'owner' && (
-            <InviteMemberDialog vaultId={id} vaultName={vault.name} />
-          )}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/vaults/${id}/audit`}>Audit logs</Link>
+            </Button>
+            {role === 'owner' && (
+              <InviteMemberDialog vaultId={id} vaultName={vault.name} />
+            )}
+          </div>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr,300px]">
+        <div className="grid gap-6 lg:gap-8 grid-cols-1 lg:grid-cols-[1fr,280px] xl:grid-cols-[1fr,320px]">
           <VaultDetail
             vaultId={id}
             sources={sources ?? []}
@@ -96,6 +105,7 @@ export default async function VaultPage({
           />
         </div>
       </div>
+      </VaultPresenceProvider>
     </RealtimeVault>
   )
 }
