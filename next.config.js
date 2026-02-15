@@ -48,6 +48,8 @@ const nextConfig = {
     // Disable static optimization for pages using PDF viewer
     experimental: {
       esmExternals: 'loose',
+      // Prevent Supabase from being bundled into a vendor chunk (fixes missing ./vendor-chunks/@supabase.js)
+      serverComponentsExternalPackages: ['@supabase/supabase-js', '@supabase/ssr'],
     },
   }
   

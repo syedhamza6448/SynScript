@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Plus, Trash2, Search, Calendar } from 'lucide-react'
 import { deleteSourcesBulk } from '@/app/actions/sources'
 import type { VaultRole } from '@/lib/auth/rbac'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 
 interface Annotation {
   id: string
@@ -50,6 +51,7 @@ export function VaultDetail({
   const [bulkDeleting, setBulkDeleting] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<'list' | 'timeline'>('list')
+  const [bulkDeleteConfirmOpen, setBulkDeleteConfirmOpen] = useState(false)
   const router = useRouter()
 
   const filteredAndSortedSources = useMemo(() => {
@@ -80,13 +82,17 @@ export function VaultDetail({
     })
   }
 
-  async function handleBulkDelete() {
+  function openBulkDeleteConfirm() {
+    if (selectedIds.size > 0) setBulkDeleteConfirmOpen(true)
+  }
+
+  async function handleConfirmBulkDelete() {
     if (selectedIds.size === 0) return
-    if (!confirm(`Delete ${selectedIds.size} source(s) and their annotations?`)) return
     setBulkDeleting(true)
     try {
       const { error } = await deleteSourcesBulk(vaultId, Array.from(selectedIds))
       if (error) throw new Error(error)
+      setBulkDeleteConfirmOpen(false)
       setSelectedIds(new Set())
       router.refresh()
     } catch (err) {
@@ -102,13 +108,13 @@ export function VaultDetail({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h2 className="text-lg sm:text-xl font-black uppercase">Sources</h2>
           <div className="flex items-center gap-2 flex-wrap">
-            {canEdit && selectedIds.size > 0 && (
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleBulkDelete}
-                disabled={bulkDeleting}
-              >
+          {canEdit && selectedIds.size > 0 && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={openBulkDeleteConfirm}
+              disabled={bulkDeleting}
+            >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete selected ({selectedIds.size})
               </Button>
@@ -177,6 +183,18 @@ export function VaultDetail({
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={bulkDeleteConfirmOpen}
+        onOpenChange={setBulkDeleteConfirmOpen}
+        title="Delete selected sources"
+        description={`Delete ${selectedIds.size} source(s) and their annotations? This cannot be undone.`}
+        confirmLabel="Delete all"
+        cancelLabel="Cancel"
+        variant="destructive"
+        onConfirm={handleConfirmBulkDelete}
+        loading={bulkDeleting}
+      />
     </div>
   )
 }

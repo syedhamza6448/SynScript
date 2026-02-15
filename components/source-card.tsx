@@ -23,6 +23,7 @@ import { AddAnnotationDialog } from './add-annotation-dialog'
 import { EditSourceDialog } from './edit-source-dialog'
 import { UploadPdfDialog } from './upload-pdf-dialog'
 import { SourceDiscussion } from './source-discussion'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 
 interface Annotation {
   id: string
@@ -53,13 +54,14 @@ interface SourceCardProps {
 export function SourceCard({ source, vaultId, canEdit, selectable, selected, onSelectChange }: SourceCardProps) {
   const [deleting, setDeleting] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const router = useRouter()
 
-  async function handleDelete() {
-    if (!confirm('Delete this source and all annotations?')) return
+  async function handleConfirmDelete() {
     setDeleting(true)
     try {
       await deleteSource(vaultId, source.id)
+      setDeleteConfirmOpen(false)
       router.refresh()
     } finally {
       setDeleting(false)
@@ -67,8 +69,9 @@ export function SourceCard({ source, vaultId, canEdit, selectable, selected, onS
   }
 
   return (
+    <>
     <Card className={`shadow-neo-md hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-neo-lg transition-all duration-150 ${selected ? 'ring-2 ring-neo-cyan' : ''}`}>
-      <CardHeader className="flex flex-row items-start justify-between space-y-0">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 p-3 sm:p-4 md:p-6">
         <div className="space-y-1.5 flex-1 flex items-start gap-2">
           {selectable && onSelectChange && (
             <input
@@ -128,7 +131,7 @@ export function SourceCard({ source, vaultId, canEdit, selectable, selected, onS
               />
               <DropdownMenuItem
                 className="text-destructive"
-                onClick={handleDelete}
+                onClick={() => setDeleteConfirmOpen(true)}
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -138,7 +141,7 @@ export function SourceCard({ source, vaultId, canEdit, selectable, selected, onS
           </DropdownMenu>
         )}
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-3 sm:p-4 md:p-6 pt-0">
         {source.annotations && source.annotations.length > 0 ? (
           <div className="space-y-2">
             <h4 className="text-sm font-medium">Annotations</h4>
@@ -169,5 +172,18 @@ export function SourceCard({ source, vaultId, canEdit, selectable, selected, onS
         </div>
       </CardContent>
     </Card>
+
+    <ConfirmDialog
+      open={deleteConfirmOpen}
+      onOpenChange={setDeleteConfirmOpen}
+      title="Delete source"
+      description="Delete this source and all its annotations? This cannot be undone."
+      confirmLabel="Delete"
+      cancelLabel="Cancel"
+      variant="destructive"
+      onConfirm={handleConfirmDelete}
+      loading={deleting}
+    />
+  </>
   )
 }
